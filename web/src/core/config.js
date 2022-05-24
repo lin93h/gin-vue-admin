@@ -3,8 +3,8 @@
  */
 
 const config = {
-  appName: 'Gin-Vue-Admin',
-  appLogo: 'https://www.gin-vue-admin.com/img/logo.png',
+  appName: '服务云',
+  appLogo: 'http://cloud.gamecdn.com/static/admin/images/logo.png',
   showViteLogo: true
 }
 
