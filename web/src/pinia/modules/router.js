@@ -39,9 +39,9 @@ export const useRouterStore = defineStore('router', () => {
   const keepAliveRouters = ref(keepAliveRoutersArr)
   const routeMap = ({})
   // 从后台获取动态路由
-  const SetAsyncRouter = async() => {
+  const SetAsyncRouter = async () => {
     const baseRouter = [{
-      path: '/layout',
+      path: '/',
       name: 'layout',
       component: 'view/layout/index.vue',
       meta: {
@@ -74,7 +74,7 @@ export const useRouterStore = defineStore('router', () => {
     baseRouter[0].children = asyncRouter
     baseRouter.push({
       path: '/:catchAll(.*)',
-      redirect: '/layout/404'
+      redirect: '/404'
 
     })
     asyncRouterHandle(baseRouter)
