@@ -33,6 +33,7 @@
                           :key="item.path"
                         >{{ route.params.title || item.meta.title }}</el-breadcrumb-item>
                       </el-breadcrumb>
+                      <!-- <MenuTop /> -->
                     </el-col>
                     <el-col :xs="12" :lg="9" :md="9" :sm="14" :xl="9">
                       <div class="right-box">
@@ -87,8 +88,8 @@
             </transition>
           </div>
         </router-view>
-        <BottomInfo />
-        <setting />
+        <!-- <BottomInfo /> -->
+        <!-- <setting /> -->
       </el-main>
     </el-container>
 
@@ -102,6 +103,7 @@ export default {
 </script>
 
 <script setup>
+import MenuTop from '@/view/layout/menu/top.vue'
 import Aside from '@/view/layout/aside/index.vue'
 import HistoryComponent from '@/view/layout/aside/historyComponent/history.vue'
 import Search from '@/view/layout/search/search.vue'
