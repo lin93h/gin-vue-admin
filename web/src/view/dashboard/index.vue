@@ -109,12 +109,9 @@
           <span>数据统计</span>
         </div>
         <div class="echart-box">
-          <el-row :gutter="20">
-            <el-col :xs="24" :sm="18">
+          <el-row>
+            <el-col :span="24">
               <echarts-line />
-            </el-col>
-            <el-col :xs="24" :sm="6">
-              <dashboard-table />
             </el-col>
           </el-row>
         </div>
@@ -125,7 +122,6 @@
 
 <script setup>
 import echartsLine from '@/view/dashboard/dashboardCharts/echartsLine.vue'
-import dashboardTable from '@/view/dashboard/dashboardTable/dashboardTable.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
