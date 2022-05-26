@@ -1,8 +1,13 @@
 ﻿<template>
   <div class="router-history">
+    <!-- 
+      closable修改为!(historys.length === 1),当只有一个tabs不可操作关闭，
+      原判断条件为!(historys.length === 1 && $route.name === defaultRouter)，
+      openContextMenu()方法同步修改
+    -->
     <el-tabs
       v-model="activeValue"
-      :closable="!(historys.length === 1 && $route.name === defaultRouter)"
+      :closable="!(historys.length === 1)"
       type="card"
       @contextmenu.prevent="openContextMenu($event)"
       @tab-click="changeTab"
@@ -58,6 +63,7 @@ import { emitter } from '@/utils/bus.js'
 import { computed, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/pinia/modules/user'
+import { useRouterStore } from '@/pinia/modules/router'
 
 const route = useRoute()
 const router = useRouter()
@@ -85,10 +91,11 @@ const isMobile = ref(false)
 const rightActive = ref('')
 const defaultRouter = computed(() => userStore.userInfo.authority.defaultRouter)
 const openContextMenu = (e) => {
-  if (
-    historys.value.length === 1 &&
-        route.name === defaultRouter.value
-  ) {
+  /**
+   * 判断调整为(historys.value.length === 1)，但只有一个tab是不可操作,
+   * 原判断为(historys.value.length === 1 && route.name === defaultRouter.value)
+   */
+  if (historys.value.length === 1) {
     return false
   }
   let id = ''
@@ -207,6 +214,7 @@ const setTab = (route) => {
 }
 const changeTab = (component) => {
   const tab = component.instance.attrs.tab
+  console.log('tab:', tab)
   router.push({
     name: tab.name,
     query: tab.query,
@@ -217,7 +225,8 @@ const removeTab = (tab) => {
   const index = historys.value.findIndex(
     (item) => getFmtString(item) === tab
   )
-  if (getFmtString(route) === tab) {
+  // 原代码为getFmtString(route)有误，匹配的应该是操作的路由，而不是当前路由
+  if (getFmtString(historys.value[index]) === tab) {
     if (historys.value.length === 1) {
       router.push({ name: defaultRouter.value })
     } else {
