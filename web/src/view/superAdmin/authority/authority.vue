@@ -14,36 +14,37 @@
         <el-table-column label="角色ID" min-width="180" prop="authorityId" />
         <el-table-column align="left" label="角色名称" min-width="180" prop="authorityName" />
         <el-table-column align="left" label="操作" width="460">
-          <template #default="scope">
+          <template #default="{row}">
             <el-button
               icon="setting"
               size="small"
               type="text"
-              @click="opdendrawer(scope.row)"
+              @click="opdendrawer(row)"
             >设置权限</el-button>
             <el-button
               icon="plus"
               size="small"
               type="text"
-              @click="addAuthority(scope.row.authorityId)"
+              @click="addAuthority(row.authorityId)"
             >新增子角色</el-button>
             <el-button
               icon="copy-document"
               size="small"
               type="text"
-              @click="copyAuthorityFunc(scope.row)"
+              @click="copyAuthorityFunc(row)"
             >拷贝</el-button>
             <el-button
               icon="edit"
               size="small"
               type="text"
-              @click="editAuthority(scope.row)"
+              @click="editAuthority(row)"
             >编辑</el-button>
             <el-button
               icon="delete"
               size="small"
               type="text"
-              @click="deleteAuth(scope.row)"
+              @click="deleteAuth(row)"
+              v-if="row.authorityId !== '888'"
             >删除</el-button>
           </template>
         </el-table-column>
