@@ -46,6 +46,13 @@ const handleSizeChange = (val) => {
   handleInit()
 }
 
+const handlePrint = () => {
+  let dom = window.open()
+  dom.document.body.innerHTML = "<div>这是要打印的内容</div>"
+  dom.window.print()
+  dom.window.close()
+}
+
 onMounted(() => {
   handleInit()
 })
@@ -100,7 +107,7 @@ onMounted(() => {
             </section>
             <section class="right">
               <el-button type="warning" v-auth="'export'">导出</el-button>
-              <el-button type="warning">打印</el-button>
+              <el-button type="warning" @click="handlePrint">打印</el-button>
             </section>
           </div>
         </template>
