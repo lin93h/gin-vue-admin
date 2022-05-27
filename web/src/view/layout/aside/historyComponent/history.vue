@@ -207,14 +207,12 @@ const setTab = (route) => {
     delete obj.meta.matched
     obj.query = route.query
     obj.params = route.params
-    console.log(obj)
     historys.value.push(obj)
   }
   window.sessionStorage.setItem('activeValue', getFmtString(route))
 }
 const changeTab = (component) => {
   const tab = component.instance.attrs.tab
-  console.log('tab:', tab)
   router.push({
     name: tab.name,
     query: tab.query,

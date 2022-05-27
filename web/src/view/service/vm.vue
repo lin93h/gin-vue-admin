@@ -94,8 +94,14 @@ onMounted(() => {
       <el-table-column>
         <template #header>
           <div class="table-top-bar">
-            <el-button>刷新</el-button>
-            <el-button>刷新云主机</el-button>
+            <section class="left">
+              <el-button type="primary">刷新</el-button>
+              <el-button type="primary">刷新云主机</el-button>
+            </section>
+            <section class="right">
+              <el-button type="warning" v-auth="'export'">导出</el-button>
+              <el-button type="warning">打印</el-button>
+            </section>
           </div>
         </template>
         <el-table-column label="服务器名" prop=""></el-table-column>
@@ -126,6 +132,12 @@ onMounted(() => {
     padding: 20px 30px;
     margin-bottom: 20px;
     border: 1px solid #ddd;
+  }
+  .table-top-bar {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
   }
 }
 </style>
