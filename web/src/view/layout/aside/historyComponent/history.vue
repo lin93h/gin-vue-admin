@@ -244,6 +244,8 @@ const removeTab = (tab) => {
     }
   }
   historys.value.splice(index, 1)
+  // 删除后保存一次历史路由，否则删除其他非当前路由watch不会触发tab不会触发保存
+  sessionStorage.setItem('historys', JSON.stringify(historys.value))
 }
 
 watch(contextMenuVisible, () => {
