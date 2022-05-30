@@ -1,5 +1,6 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
+import Print from './components/Print.vue'
 
 let nodeList = ref([])
 let searchParams = reactive({
@@ -14,6 +15,7 @@ let tableData = ref([])
 let page = ref(1)
 let pageSize = ref(10)
 let total = ref(0)
+const print = ref(null)
 
 
 const handleInit = () => {
@@ -48,7 +50,7 @@ const handleSizeChange = (val) => {
 
 const handlePrint = () => {
   let dom = window.open()
-  dom.document.body.innerHTML = "<div>这是要打印的内容</div>"
+  dom.document.body.appendChild(print.value.childDom)
   dom.window.print()
   dom.window.close()
 }
@@ -60,7 +62,7 @@ onMounted(() => {
 
 <template>
   <div class="service-vm-wrapper">
-    <fieldset>
+    <fieldset ref="demo1">
       <legend>所属节点</legend>
       <el-radio-group v-model="searchParams.nuuid" size="large">
         <el-radio-button v-for="item in nodeList" :key="item.nuuid" :label="item.nuuid">{{ item.name }}
@@ -127,6 +129,7 @@ onMounted(() => {
         layout="total, sizes, prev, pager, next, jumper" @current-change="handleCurrentChange"
         @size-change="handleSizeChange" />
     </div>
+    <Print :data="statusList" ref="print"></Print>
   </div>
 </template>
 
@@ -140,6 +143,7 @@ onMounted(() => {
     margin-bottom: 20px;
     border: 1px solid #ddd;
   }
+
   .table-top-bar {
     display: flex;
     flex-flow: row nowrap;
