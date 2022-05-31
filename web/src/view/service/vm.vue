@@ -1,6 +1,9 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import Print from './components/Print.vue'
+import { useBtnAuth } from '@/utils/btnAuth'
+
+const btnAuth = useBtnAuth()
 
 let nodeList = ref([])
 let searchParams = reactive({
@@ -36,6 +39,8 @@ const handleInit = () => {
     { label: '一个月内过期', value: 5 },
     { label: '已删除', value: 6 },
   ]
+
+  tableData.value = [{ id: 1 }]
 }
 
 const handleCurrentChange = (val) => {
@@ -49,10 +54,10 @@ const handleSizeChange = (val) => {
 }
 
 const handlePrint = () => {
-  let dom = window.open()
-  dom.document.body.appendChild(print.value.childDom)
-  dom.window.print()
-  dom.window.close()
+  let tab = window.open()
+  tab.document.body.appendChild(print.value.printInfo)
+  tab.window.print()
+  tab.window.close()
 }
 
 onMounted(() => {
@@ -104,12 +109,12 @@ onMounted(() => {
         <template #header>
           <div class="table-top-bar">
             <section class="left">
-              <el-button type="primary">刷新</el-button>
-              <el-button type="primary">刷新云主机</el-button>
+              <el-button type="success">刷新</el-button>
+              <el-button type="success">刷新云主机</el-button>
             </section>
             <section class="right">
-              <el-button type="warning" v-auth="'export'">导出</el-button>
-              <el-button type="warning" @click="handlePrint">打印</el-button>
+              <el-button type="default" plain v-auth="btnAuth.export">导出</el-button>
+              <el-button type="default" plain @click="handlePrint">打印</el-button>
             </section>
           </div>
         </template>
@@ -120,8 +125,29 @@ onMounted(() => {
         <el-table-column label="配置" prop=""></el-table-column>
         <el-table-column label="创建/到期时间" prop=""></el-table-column>
         <el-table-column label="状态" prop=""></el-table-column>
-        <el-table-column label="运维" width="130"></el-table-column>
-        <el-table-column label="操作" width="130"></el-table-column>
+        <el-table-column label="运维" width="180" align="center" fixed="right">
+          <template #default="{ row }">
+            <el-button size="small">同步</el-button>
+            <el-button size="small">暂停</el-button>
+            <el-button size="small">重启</el-button>
+            <el-button size="small">控制台</el-button>
+            <el-button size="small">修改密码</el-button>
+            <el-button size="small">日志</el-button>
+            <el-button size="small">关闭防欺诈</el-button>
+            <el-button size="small">临时带宽</el-button>
+            <el-button size="small">新增ip</el-button>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="200" align="center" fixed="right">
+          <template #default="{ row }">
+            <el-button size="small">过户</el-button>
+            <el-button size="small">到期</el-button>
+            <el-button size="small">监控</el-button>
+            <el-button size="small">锁定</el-button>
+            <el-button type="danger" size="small">删除</el-button>
+            <el-button size="small">恢复删除</el-button>
+          </template>
+        </el-table-column>
       </el-table-column>
     </el-table>
     <div class="gva-pagination">

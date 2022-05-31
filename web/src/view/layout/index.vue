@@ -90,7 +90,7 @@
           </div>
         </router-view>
         <!-- <BottomInfo /> -->
-        <!-- <setting /> -->
+        <setting />
       </el-main>
     </el-container>
 
