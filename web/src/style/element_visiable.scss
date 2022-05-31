@@ -1,12 +1,5 @@
 /* 改变主题色变量 */
 
-#app {
-    .el-button {
-        font-weight: 400;
-        border-radius: 2px;
-    }
-}
-
 .el-dialog {
     border-radius: 2px;
 }
@@ -151,21 +144,8 @@
     }
 }
 
-.el-button--small {
-    min-height: 32px;
-    font-size: 12px !important;
-}
-
 .el-checkbox{
     height: auto;
-}
-
-.el-button {
-    padding: 8px 16px;
-    border-radius: 2px;
-    &.el-button--text {
-        padding: 8px 0;
-    }
 }
 
 .el-dialog {
