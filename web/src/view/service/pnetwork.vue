@@ -1,5 +1,9 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
+import Print from './components/Print.vue'
+import { useBtnAuth } from '@/utils/btnAuth'
+
+const btnAuth = useBtnAuth()
 
 let nodeList = ref([])
 let searchParams = reactive({
@@ -14,6 +18,7 @@ let tableData = ref([])
 let page = ref(1)
 let pageSize = ref(10)
 let total = ref(0)
+const print = ref(null)
 
 
 const handleInit = () => {
@@ -34,6 +39,8 @@ const handleInit = () => {
     { label: '一个月内过期', value: 5 },
     { label: '已删除', value: 6 },
   ]
+
+  tableData.value = [{ id: 1 }]
 }
 
 const handleCurrentChange = (val) => {
@@ -46,6 +53,13 @@ const handleSizeChange = (val) => {
   handleInit()
 }
 
+const handlePrint = () => {
+  let tab = window.open()
+  tab.document.body.appendChild(print.value.printInfo)
+  tab.window.print()
+  tab.window.close()
+}
+
 onMounted(() => {
   handleInit()
 })
@@ -53,7 +67,7 @@ onMounted(() => {
 
 <template>
   <div class="service-vm-wrapper">
-    <fieldset>
+    <fieldset ref="demo1">
       <legend>所属节点</legend>
       <el-radio-group v-model="searchParams.nuuid" size="large">
         <el-radio-button v-for="item in nodeList" :key="item.nuuid" :label="item.nuuid">{{ item.name }}
@@ -74,19 +88,34 @@ onMounted(() => {
       <el-table-column>
         <template #header>
           <div class="table-top-bar">
-            <el-button>刷新</el-button>
-            <el-button>刷新云主机</el-button>
+            <section class="left">
+              <el-button type="primary">同步私有网络</el-button>
+              <el-button type="success">刷新云主机</el-button>
+            </section>
+            <section class="right">
+              <el-button type="default" plain>导出</el-button>
+              <el-button type="default" plain @click="handlePrint">打印</el-button>
+            </section>
           </div>
         </template>
-        <el-table-column label="服务器名" prop=""></el-table-column>
-        <el-table-column label="用户" prop=""></el-table-column>
-        <el-table-column label="ip" prop=""></el-table-column>
-        <el-table-column label="计费" prop=""></el-table-column>
+        <el-table-column label="三层网络" prop=""></el-table-column>
+        <el-table-column label="二层网络" prop=""></el-table-column>
+        <el-table-column label="ip段" prop=""></el-table-column>
+        <el-table-column label="CIDR" prop=""></el-table-column>
         <el-table-column label="配置" prop=""></el-table-column>
-        <el-table-column label="创建/到期时间" prop=""></el-table-column>
-        <el-table-column label="状态" prop=""></el-table-column>
-        <el-table-column label="运维" width="130"></el-table-column>
-        <el-table-column label="操作" width="130"></el-table-column>
+        <el-table-column label="类型" prop=""></el-table-column>
+        <el-table-column label="时间" prop=""></el-table-column>
+        <el-table-column label="状态" width="180" align="center" fixed="right">
+          <template #default="{ row }">
+            
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="200" align="center" fixed="right">
+          <template #default="{ row }">
+            <el-button size="small" type="primary">编辑</el-button>
+            <el-button size="small" type="primary">查看</el-button>
+          </template>
+        </el-table-column>
       </el-table-column>
     </el-table>
     <div class="gva-pagination">
@@ -94,6 +123,7 @@ onMounted(() => {
         layout="total, sizes, prev, pager, next, jumper" @current-change="handleCurrentChange"
         @size-change="handleSizeChange" />
     </div>
+    <Print :data="statusList" ref="print"></Print>
   </div>
 </template>
 
@@ -106,6 +136,13 @@ onMounted(() => {
     padding: 20px 30px;
     margin-bottom: 20px;
     border: 1px solid #ddd;
+  }
+
+  .table-top-bar {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
   }
 }
 </style>
