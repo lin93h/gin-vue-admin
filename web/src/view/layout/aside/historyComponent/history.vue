@@ -223,8 +223,7 @@ const removeTab = (tab) => {
   const index = historys.value.findIndex(
     (item) => getFmtString(item) === tab
   )
-  // 原代码为getFmtString(route)有误，匹配的应该是操作的路由，而不是当前路由
-  if (getFmtString(historys.value[index]) === tab) {
+  if (getFmtString(route) === tab)  {
     if (historys.value.length === 1) {
       router.push({ name: defaultRouter.value })
     } else {
@@ -244,8 +243,6 @@ const removeTab = (tab) => {
     }
   }
   historys.value.splice(index, 1)
-  // 删除后保存一次历史路由，否则删除其他非当前路由watch不会触发tab不会触发保存
-  sessionStorage.setItem('historys', JSON.stringify(historys.value))
 }
 
 watch(contextMenuVisible, () => {
@@ -268,6 +265,12 @@ watch(route, (to, now) => {
   setTab(to)
   sessionStorage.setItem('historys', JSON.stringify(historys.value))
   activeValue.value = window.sessionStorage.getItem('activeValue')
+})
+
+watch(() => historys.value, () => {
+  sessionStorage.setItem('historys', JSON.stringify(historys.value))
+}, {
+  deep: true
 })
 
 const initPage = () => {
