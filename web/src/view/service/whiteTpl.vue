@@ -11,7 +11,8 @@ let searchParams = reactive({
   status: 1,
   user: '',
   cpu: '',
-  ram: ''
+  ram: '',
+  type: 0
 })
 let serviceType = ref(0)
 let statusList = ref([])
@@ -20,6 +21,8 @@ let page = ref(1)
 let pageSize = ref(10)
 let total = ref(0)
 let selectData = ref([])
+let typeList = ref([])
+let sortList = ref([])
 const print = ref(null)
 
 
@@ -32,12 +35,23 @@ const handleInit = () => {
     { label: '香港', value: 5 },
   ]
 
+  typeList.value = [
+    { label: '全部', value: 0},
+    { label: '企业', value: 1},
+    { label: '个人', value: 2},
+  ]
+
+  sortList.value = [
+    { label: '正常使用', value: 1},
+    { label: '已锁定', value: 2},
+  ]
+
   statusList.value = [
-    { label: '所有', value: 1 },
-    { label: '已审', value: 2 },
-    { label: '未审', value: 3 },
-    { label: '有效', value: 4 },
-    { label: '无效', value: 5 },
+    { label: '全部', value: 1 },
+    { label: '待审核', value: 2 },
+    { label: '未通过', value: 3 },
+    { label: '待上传', value: 4 },
+    { label: '已审核', value: 5 },
   ]
 
   tableData.value = [{ id: 1 }]
@@ -74,9 +88,19 @@ onMounted(() => {
     <fieldset>
       <legend>搜索信息</legend>
       <el-form v-model="searchParams" label-width="100px">
-        <el-form-item label="状态">
+        <el-form-item label="模板状态">
           <el-radio-group v-model="searchParams.status">
-            <el-radio v-for="item in statusList" :label="item.value">{{ item.label }}</el-radio>
+            <el-radio-button v-for="item in statusList" :label="item.value">{{ item.label }}</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="模板类型">
+          <el-radio-group v-model="searchParams.type">
+            <el-radio-button v-for="item in typeList" :label="item.value">{{ item.label }}</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="分类管理">
+          <el-radio-group v-model="searchParams.sort">
+            <el-radio-button v-for="item in sortList" :label="item.value">{{ item.label }}</el-radio-button>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="筛选条件">
@@ -103,22 +127,18 @@ onMounted(() => {
           <div class="table-top-bar">
             <section class="left">
               <el-button type="danger" :disabled="!selectData.length">批量删除</el-button>
-              <el-button type="success" :disabled="!selectData.length">批量生效</el-button>
-              <el-button type="info" :disabled="!selectData.length">批量失效</el-button>
             </section>
             <section class="right">
-              <el-button type="success">添加白名单</el-button>
-              <el-button type="primary">同步域名</el-button>
               <el-button type="default" plain v-auth="btnAuth.export">导出</el-button>
               <el-button type="default" plain @click="handlePrint">打印</el-button>
             </section>
           </div>
         </template>
         <el-table-column type="selection" width="55" />
-        <el-table-column label="域名" prop=""></el-table-column>
-        <el-table-column label="备案号" prop=""></el-table-column>
+        <el-table-column label="名字" prop=""></el-table-column>
+        <el-table-column label="负责人名字" prop="" width="140"></el-table-column>
+        <el-table-column label="证件号" prop=""></el-table-column>
         <el-table-column label="用户" prop=""></el-table-column>
-        <el-table-column label="模板" prop=""></el-table-column>
         <el-table-column label="服务器类型" prop="" width="300">
           <template #default="{ row }">
             <el-select v-model="serviceType" multiple placeholder="Select">
@@ -126,9 +146,10 @@ onMounted(() => {
             </el-select>
           </template>
         </el-table-column>
+        <el-table-column label="联系方式" prop=""></el-table-column>
         <el-table-column label="时间" prop=""></el-table-column>
         <el-table-column label="状态" prop=""></el-table-column>
-        <el-table-column label="系统备注" prop=""></el-table-column>
+        <el-table-column label="审核说明" prop=""></el-table-column>
         <el-table-column label="操作" width="180" align="center" fixed="right">
           <template #default="{ row }">
             <el-button size="small">保存</el-button>
